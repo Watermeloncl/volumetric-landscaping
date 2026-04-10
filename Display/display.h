@@ -4,6 +4,8 @@
 #include <windows.h>
 #include <d2d1.h>
 
+#include "screen.h"
+
 class DisplayModule {
 private:
     ID2D1Factory* factory = nullptr;
@@ -11,6 +13,7 @@ private:
     ID2D1Bitmap* bitmap = nullptr;
     HWND hwnd = NULL;
 
+    Screen* screen = nullptr;
 public:
     DisplayModule(HINSTANCE hInstance, int nCmdShow);
     ~DisplayModule();
@@ -22,8 +25,8 @@ public:
     void InitD2D();
     void CleanupD2D();
 
-    void RenderFrame(UINT32* pixels);
-
+    void RenderFrame();
+    Screen* GetScreen();
 private:
 };
 

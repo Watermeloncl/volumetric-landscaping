@@ -3,12 +3,15 @@
 #include <iostream>
 
 #include "display.h"
+#include "screen.h"
 #include "..\config.h"
 
 DisplayModule::DisplayModule(HINSTANCE hInstance, int nCmdShow) {
     this->CreateWindowModule(hInstance, nCmdShow);
 
     this->InitD2D();
+
+    this->screen = new Screen();
 }
 
 DisplayModule::~DisplayModule() {
@@ -100,12 +103,16 @@ void DisplayModule::CleanupD2D() {
     if (factory) factory->Release();
 }
 
-void DisplayModule::RenderFrame(UINT32* pixels) {
+void DisplayModule::RenderFrame() {
     D2D1_RECT_U rect = {0, 0, (UINT32)CLIENT_SCREEN_WIDTH, (UINT32)CLIENT_SCREEN_HEIGHT};
-    this->bitmap->CopyFromMemory(&rect, pixels, CLIENT_SCREEN_WIDTH * 4);
+    this->bitmap->CopyFromMemory(&rect, this->screen->GetPixels(), CLIENT_SCREEN_WIDTH * 4);
 
     this->renderTarget->BeginDraw();
     this->renderTarget->Clear(D2D1::ColorF(0, 0, 0));
     this->renderTarget->DrawBitmap(this->bitmap);
     this->renderTarget->EndDraw(); // BLOCKS for VSync
+}
+
+Screen* DisplayModule::GetScreen() {
+    return this->screen;
 }

@@ -1,9 +1,13 @@
 #include <windows.h>
 #include <iostream>
 #include <chrono>
+#include <vector>
+#include <thread>
 
 #include "scheduler.h"
 #include "..\Display\display.h"
+#include "threadBuffer.h"
+#include "worker.h"
 #include "..\config.h"
 
 using SchedClock = std::chrono::high_resolution_clock;
@@ -16,9 +20,21 @@ SchedulerModule::SchedulerModule(HINSTANCE hInstance, int nCmdShow) {
 
 SchedulerModule::~SchedulerModule() {
     delete this->display;
+    for(int i = 0; i < NUM_WORKER_THREADS; i++) {
+        delete this->buffers[i];
+    }
+    delete[] this->buffers;
+
+    for(std::thread &t : workers) {
+        if(t.joinable()) {
+            t.join();
+        }
+    }
 }
 
 void SchedulerModule::RunMainLoop() {
+    this->InitThreads();
+
     TimeStamp lastTime = SchedClock::now();
     TimeStamp now = SchedClock::now();
 
@@ -28,15 +44,6 @@ void SchedulerModule::RunMainLoop() {
 
     int frame = 0;
     bool running = true;
-
-    unsigned char r, g, b;
-
-    UINT32* g_pixels = new UINT32[CLIENT_SCREEN_WIDTH * CLIENT_SCREEN_HEIGHT];
-    for(int y = 0; y < CLIENT_SCREEN_HEIGHT; y++) {
-        for (int x = 0; x < CLIENT_SCREEN_WIDTH; x++) {
-            g_pixels[y * CLIENT_SCREEN_WIDTH + x] = 0xFF000000;
-        }
-    }
 
     MSG msg = {};
     while(running) {
@@ -56,20 +63,43 @@ void SchedulerModule::RunMainLoop() {
         while(accumulator >= dt) {
             frame++;
 
-            for(int y = 0; y < CLIENT_SCREEN_HEIGHT; y++) {
-                for (int x = 0; x < CLIENT_SCREEN_WIDTH; x++) {
-                    r = (unsigned char)((x + frame) % 256);
-                    g = (unsigned char)((y + frame) % 256);
-                    b = (unsigned char)((x + y + frame) % 256);
-                    g_pixels[y * CLIENT_SCREEN_WIDTH + x] = 0xFF000000 | (((UINT32)r) << 16) | (((UINT32)g) << 8) | ((UINT32)b);
-                }
+            for(int i = 0; i < NUM_WORKER_THREADS; i++) {
+                this->AddPixels(this->buffers[i], i);
             }
 
             accumulator -= dt;
         }
 
-        this->display->RenderFrame(g_pixels);
+        this->display->RenderFrame();
     }
+}
 
+void SchedulerModule::InitThreads() {
+    this->buffers = new ThreadBuffer*[NUM_WORKER_THREADS];
 
+    int totalPixels = CLIENT_SCREEN_WIDTH * CLIENT_SCREEN_HEIGHT;
+    int n = totalPixels / NUM_WORKER_THREADS;
+    int startY;
+
+    for(int i = 0; i < NUM_WORKER_THREADS; i++) {
+        startY = (n * i) / CLIENT_SCREEN_WIDTH;
+        ThreadBuffer* buffer = new ThreadBuffer(0, startY, n);
+        this->buffers[i] = buffer;
+
+        this->workers.push_back(std::thread(Worker::ComputePixels, buffer));
+    }
+}
+
+void SchedulerModule::AddPixels(ThreadBuffer* buffer, int threadNum) {
+    int destinationIndex = buffer->startY * CLIENT_SCREEN_WIDTH;
+    int dest3Index = destinationIndex * 3;
+    int sourceIndex = buffer->readIndex + 1;
+
+    while(buffer->readiness[sourceIndex]) {
+        this->display->GetScreen()->AddPixel(destinationIndex, 0xFF000000 | (((UINT32)(buffer->data[sourceIndex])) << 16) | (((UINT32)(buffer->data[sourceIndex + 1])) << 8) | ((UINT32)(buffer->data[sourceIndex + 2])));
+
+        destinationIndex++;
+        sourceIndex += 3;
+        dest3Index += 3;
+    }
 }
