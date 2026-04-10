@@ -17,9 +17,13 @@ void Worker::ComputePixels(ThreadBuffer* buffer) {
 
     for(int i = 0; i < buffer->n; i++) {
 
-        buffer->data[buffer->writeIndex] = act(randomColor(gen), (float)i, (float)buffer->n, 0);
-        buffer->data[buffer->writeIndex + 1] = act(randomColor(gen), (float)i, (float)buffer->n, 50);
-        buffer->data[buffer->writeIndex + 2] = act(randomColor(gen), (float)i, (float)buffer->n, 50);
+        // buffer->data[buffer->writeIndex] = act(randomColor(gen), (float)i, (float)buffer->n, 0);
+        // buffer->data[buffer->writeIndex + 1] = act(randomColor(gen), (float)i, (float)buffer->n, 50);
+        // buffer->data[buffer->writeIndex + 2] = act(randomColor(gen), (float)i, (float)buffer->n, 50);
+
+        buffer->data[buffer->writeIndex] = 40;
+        buffer->data[buffer->writeIndex + 1] = 255;
+        buffer->data[buffer->writeIndex + 2] = 40;
 
         Worker::SignalReady(buffer);
     }
