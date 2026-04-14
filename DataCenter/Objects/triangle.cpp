@@ -1,7 +1,9 @@
+#include <iostream>
 #include <cmath>
 
 #include "triangle.h"
 #include "point.h"
+#include "..\..\Utilities\mathUtilities.h"
 
 Triangle::Triangle(Point* point0, Point* point1, Point* point2) {
     this->points[0] = point0;
@@ -30,11 +32,9 @@ void Triangle::SetNormal() {
     double ny = (az * bx) - (ax * bz);
     double nz = (ax * by) - (ay * bx);
 
-    //TODO change to math function normalize
-    double invMag = 1 / std::sqrt(nx*nx + ny*ny + nz*nz);
-    nx *= invMag;
-    ny *= invMag;
-    nz *= invMag;
+    MathUtilities::Normalize(nx, ny, nz);
+
+    std::cout << "normals: " << nx << " " << ny << " " << nz << std::endl;
 
     this->normal->SetX(nx);
     this->normal->SetY(ny);

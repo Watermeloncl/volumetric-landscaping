@@ -19,7 +19,7 @@ MeshGenerator::~MeshGenerator() {
 Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
     Mesh* newMesh = new Mesh();
 
-    int cubeIndex, edgeValue;// = edgeTable[cubeIndex];
+    int cubeIndex, edgeValue;
     Point intersections[12];
     Triangle* newTriangle;
 
