@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "point.h"
 
 Point::Point() {
@@ -44,4 +46,9 @@ void Point::SetZ(double newZ) {
 
 double Point::GetZ() {
     return this->z;
+}
+
+std::ostream& operator<<(std::ostream& os, const Point& p) {
+    os << p.x << " " << p.y << " " << p.z;
+    return os;
 }

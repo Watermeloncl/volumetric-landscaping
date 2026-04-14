@@ -20,17 +20,17 @@ Triangle::~Triangle() {
 void Triangle::SetNormal() {
     this->normal = new Point();
 
-    double ax = points[2]->GetX() - points[0]->GetX();
-    double ay = points[2]->GetY() - points[0]->GetY();
-    double az = points[2]->GetZ() - points[0]->GetZ();
+    double x1 = points[1]->GetX() - points[0]->GetX();
+    double y1 = points[1]->GetY() - points[0]->GetY();
+    double z1 = points[1]->GetZ() - points[0]->GetZ();
     
-    double bx = points[1]->GetX() - points[0]->GetX();
-    double by = points[1]->GetY() - points[0]->GetY();
-    double bz = points[1]->GetZ() - points[0]->GetZ();
+    double x2 = points[2]->GetX() - points[1]->GetX();
+    double y2 = points[2]->GetY() - points[1]->GetY();
+    double z2 = points[2]->GetZ() - points[1]->GetZ();
 
-    double nx = (ay * bz) - (az * by);
-    double ny = (az * bx) - (ax * bz);
-    double nz = (ax * by) - (ay * bx);
+    double nx = (y1*z2) - (z1*y2);
+    double ny = -((x1*z2) - (z1*x2));
+    double nz = (x1*y2) - (y1*x2);
 
     MathUtilities::Normalize(nx, ny, nz);
 

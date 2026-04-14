@@ -9,6 +9,6 @@ const int NUM_WORKER_THREADS = 10;
 const int POINT_CLOUD_SIZE = 8; //128?
 
 const float PERLIN_HILL_SCALE = 0.08f;
-const float ISO_VALUE = 0.0f;
+const float ISO_VALUE = -0.3f;
 
 #endif

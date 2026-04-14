@@ -30,8 +30,8 @@ PointCloud* DataGenerator::CreatePointCloud() {
     }
 
     std::cout << "Points: " << std::endl;
-    for(int x = 0; x < POINT_CLOUD_SIZE; x++) {
-        for(int y = 0; y < POINT_CLOUD_SIZE; y++) {
+    for(int y = POINT_CLOUD_SIZE - 1; y >= 0; y--) {
+        for(int x = 0; x < POINT_CLOUD_SIZE; x++) {
             std::cout << cloud->GetValue(x, y, 0) << " ";
         }
         std::cout << std::endl;

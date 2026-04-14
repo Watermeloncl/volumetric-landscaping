@@ -65,7 +65,12 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
                         new Point(intersections[triTable[cubeIndex][i]]),
                         new Point(intersections[triTable[cubeIndex][i + 1]]),
                         new Point(intersections[triTable[cubeIndex][i + 2]])
-                    );                    
+                    );
+
+                    // std::cout << "Intersections: ";
+                    // std::cout << intersections[triTable[cubeIndex][i]] << "; ";
+                    // std::cout << intersections[triTable[cubeIndex][i + 1]] << "; ";
+                    // std::cout << intersections[triTable[cubeIndex][i + 2]] << std::endl;
 
                     newMesh->AddTriangle(x, y, z, newTriangle);
                     newMesh->IncrementTriangleCount();

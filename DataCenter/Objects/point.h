@@ -1,6 +1,8 @@
 #ifndef DATA_CENTER_OBJECTS_POINT_H_
 #define DATA_CENTER_OBJECTS_POINT_H_
 
+#include <iostream>
+
 class Point {
 private:
     double x;
@@ -20,6 +22,8 @@ public:
 
     void SetZ(double newZ);
     double GetZ();
+
+    friend std::ostream& operator<<(std::ostream& os, const Point& s);
 };
 
 #endif
