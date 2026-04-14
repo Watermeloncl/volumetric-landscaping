@@ -8,6 +8,8 @@
 #include "..\Display\display.h"
 #include "threadBuffer.h"
 #include "worker.h"
+#include "..\DataCenter\dataCenter.h"
+#include "..\DataCenter\Objects\mesh.h"
 #include "..\config.h"
 
 using SchedClock = std::chrono::high_resolution_clock;
@@ -16,10 +18,13 @@ using TimeStamp = std::chrono::time_point<std::chrono::high_resolution_clock>;
 
 SchedulerModule::SchedulerModule(HINSTANCE hInstance, int nCmdShow) {
     this->display = new DisplayModule(hInstance, nCmdShow);
+    this->dataCenter = new DataCenter();
 }
 
 SchedulerModule::~SchedulerModule() {
     delete this->display;
+    delete this->dataCenter;
+
     for(int i = 0; i < NUM_WORKER_THREADS; i++) {
         delete this->buffers[i];
     }
@@ -33,6 +38,8 @@ SchedulerModule::~SchedulerModule() {
 }
 
 void SchedulerModule::RunMainLoop() {
+    Mesh* mesh = this->dataCenter->CreateMesh();
+
     this->InitThreads();
 
     TimeStamp lastTime = SchedClock::now();

@@ -7,6 +7,7 @@
 
 #include "..\Display\display.h"
 #include "..\Scheduler\threadBuffer.h"
+#include "..\DataCenter\dataCenter.h"
 
 class SchedulerModule {
 public:
@@ -15,6 +16,8 @@ private:
 
     std::vector<std::thread> workers;
     ThreadBuffer** buffers = nullptr;
+
+    DataCenter* dataCenter = nullptr;
 public:
     SchedulerModule(HINSTANCE hInstance, int nCmdShow);
     ~SchedulerModule();
@@ -22,7 +25,9 @@ public:
     void RunMainLoop();
     void InitThreads();
     void AddPixels(ThreadBuffer* buffer, int threadNum);
+
 private:
+
 };
 
 #endif
