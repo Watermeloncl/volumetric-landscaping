@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "meshGenerator.h"
 #include "Objects\mesh.h"
@@ -81,9 +82,7 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
 }
 
 double MeshGenerator::InterpolateVertex(float density1, float density2) {
-
-
-    return 0.0;
+    return std::fabs(ISO_VALUE - density1) / std::fabs(density2 - density1);
 }
 
 int MeshGenerator::triTable[256][16] = {

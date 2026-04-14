@@ -39,6 +39,7 @@ SchedulerModule::~SchedulerModule() {
 
 void SchedulerModule::RunMainLoop() {
     Mesh* mesh = this->dataCenter->CreateMesh();
+    delete mesh; //tmp
 
     this->InitThreads();
 
