@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "..\..\config.h"
+
 class Point {
 private:
     double x;
@@ -16,12 +18,17 @@ public:
 
     void SetX(double newX);
     double GetX();
+    void ChangeX(double deltaX);
 
     void SetY(double newY);
     double GetY();
+    void ChangeY(double deltaY);
 
     void SetZ(double newZ);
     double GetZ();
+    void ChangeZ(double deltaZ);
+
+    void Rotate(RotationType type, double cosTheta, double sinTheta);
 
     friend std::ostream& operator<<(std::ostream& os, const Point& s);
 };

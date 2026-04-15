@@ -6,6 +6,7 @@
 #include "pointCloud.h"
 #include "voxel.h"
 #include "triangle.h"
+#include "..\..\config.h"
 
 class Mesh {
 private:
@@ -24,6 +25,9 @@ public:
     
     void IncrementTriangleCount();
     int GetTriangleCount();
+
+    void Translate(double transX, double transY, double transZ);
+    void Rotate(RotationType type, double theta);
 };
 
 #endif

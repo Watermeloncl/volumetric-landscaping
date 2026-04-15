@@ -19,8 +19,9 @@ Mesh* DataCenter::CreateMesh() {
 
     PointCloud* cloud = this->dataGenerator->CreatePointCloud(/*parser info?*/);
     Mesh* mesh = this->meshGenerator->CreateMesh(cloud);
-
     delete cloud;
+
+    this->meshGenerator->TransformMesh(mesh/*, parser info*/);
 
     return mesh;
 }

@@ -2,6 +2,7 @@
 #define DATA_CENTER_OBJECTS_TRIANGLE_H_
 
 #include "point.h"
+#include "..\..\config.h"
 
 class Triangle {
 private:
@@ -12,6 +13,9 @@ public:
     ~Triangle();
 
     void SetNormal();
+
+    void Translate(double transX, double transY, double transZ);
+    void Rotate(RotationType type, double cosTheta, double sinTheta);
 };
 
 #endif

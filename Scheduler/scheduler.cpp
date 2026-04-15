@@ -39,7 +39,7 @@ SchedulerModule::~SchedulerModule() {
 
 void SchedulerModule::RunMainLoop() {
     Mesh* mesh = this->dataCenter->CreateMesh();
-    delete mesh; //tmp
+    // delete mesh;
 
     this->InitThreads();
 
@@ -70,7 +70,7 @@ void SchedulerModule::RunMainLoop() {
  
         while(accumulator >= dt) {
             frame++;
-
+            // std::cout << "frame" << std::endl;
             for(int i = 0; i < NUM_WORKER_THREADS; i++) {
                 this->AddPixels(this->buffers[i], i);
             }

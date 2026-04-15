@@ -5,7 +5,7 @@
 #include "..\..\config.h"
 
 PointCloud::PointCloud() {
-    this->densityCloud.resize(POINT_CLOUD_SIZE, std::vector<std::vector<float>>(POINT_CLOUD_SIZE, std::vector<float>(POINT_CLOUD_SIZE, 0)));
+    this->densityCloud.resize(POINT_CLOUD_WIDTH, std::vector<std::vector<float>>(POINT_CLOUD_HEIGHT, std::vector<float>(POINT_CLOUD_DEPTH, 0)));
 }
 
 PointCloud::~PointCloud() {

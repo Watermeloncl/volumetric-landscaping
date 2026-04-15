@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "mesh.h"
 #include "voxel.h"
@@ -7,11 +8,25 @@
 #include "..\..\config.h"
 
 Mesh::Mesh() {
-    this->voxels.resize(POINT_CLOUD_SIZE - 1, std::vector<std::vector<Voxel*>>(POINT_CLOUD_SIZE - 1, std::vector<Voxel*>(POINT_CLOUD_SIZE - 1, new Voxel())));
+    this->voxels.resize(POINT_CLOUD_WIDTH - 1, std::vector<std::vector<Voxel*>>(POINT_CLOUD_HEIGHT - 1, std::vector<Voxel*>(POINT_CLOUD_DEPTH - 1, nullptr)));
+
+    for(int x = 0; x < POINT_CLOUD_WIDTH - 1; x++) {
+        for(int y = 0; y < POINT_CLOUD_HEIGHT - 1; y++) {
+            for(int z = 0; z < POINT_CLOUD_DEPTH - 1; z++) {
+                this->voxels[x][y][z] = new Voxel();
+            }
+        }
+    }
 }
 
 Mesh::~Mesh() {
-
+    for(int x = 0; x < POINT_CLOUD_WIDTH - 1; x++) {
+        for(int y = 0; y < POINT_CLOUD_HEIGHT - 1; y++) {
+            for(int z = 0; z < POINT_CLOUD_DEPTH - 1; z++) {
+                delete this->voxels[x][y][z];
+            }
+        }
+    }
 }
 
 void Mesh::SetVoxel(int x, int y, int z, Voxel* newVoxel) {
@@ -32,4 +47,27 @@ void Mesh::IncrementTriangleCount() {
 
 int Mesh::GetTriangleCount() {
     return this->triangleCount;
+}
+
+void Mesh::Translate(double transX, double transY, double transZ) {
+    for(int x = 0; x < POINT_CLOUD_WIDTH - 1; x++) {
+        for(int y = 0; y < POINT_CLOUD_HEIGHT - 1; y++) {
+            for(int z = 0; z < POINT_CLOUD_DEPTH - 1; z++) {
+                this->voxels[x][y][z]->Translate(transX, transY, transZ);
+            }
+        }
+    }
+}
+
+void Mesh::Rotate(RotationType type, double theta) {
+    double cosTheta = std::cos(theta);
+    double sinTheta = std::sin(theta);
+
+    for(int x = 0; x < POINT_CLOUD_WIDTH - 1; x++) {
+        for(int y = 0; y < POINT_CLOUD_HEIGHT - 1; y++) {
+            for(int z = 0; z < POINT_CLOUD_DEPTH - 1; z++) {
+                this->voxels[x][y][z]->Rotate(type, cosTheta, sinTheta);
+            }
+        }
+    }
 }

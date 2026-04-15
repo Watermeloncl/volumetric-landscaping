@@ -4,6 +4,7 @@
 #include "triangle.h"
 #include "point.h"
 #include "..\..\Utilities\mathUtilities.h"
+#include "..\..\config.h"
 
 Triangle::Triangle(Point* point0, Point* point1, Point* point2) {
     this->points[0] = point0;
@@ -34,9 +35,27 @@ void Triangle::SetNormal() {
 
     MathUtilities::Normalize(nx, ny, nz);
 
-    std::cout << "normals: " << nx << " " << ny << " " << nz << std::endl;
-
     this->normal->SetX(nx);
     this->normal->SetY(ny);
     this->normal->SetZ(nz);
+}
+
+void Triangle::Translate(double transX, double transY, double transZ) {
+    for(Point* point : this->points) {
+        point->ChangeX(transX);
+        point->ChangeY(transY);
+        point->ChangeZ(transZ);
+    }
+
+    normal->ChangeX(transX);
+    normal->ChangeY(transY);
+    normal->ChangeZ(transZ);
+}
+
+void Triangle::Rotate(RotationType type, double cosTheta, double sinTheta) {
+    for(Point* point : this->points) {
+        point->Rotate(type, cosTheta, sinTheta);
+    }
+
+    normal->Rotate(type, cosTheta, sinTheta);
 }

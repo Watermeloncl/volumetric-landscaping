@@ -15,6 +15,8 @@ public:
 
     Mesh* CreateMesh(PointCloud* pointCloud);
     double InterpolateVertex(float density1, float density2);
+
+    void TransformMesh(Mesh* mesh);
 };
 
 #endif

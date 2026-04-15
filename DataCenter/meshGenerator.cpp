@@ -23,9 +23,9 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
     Point intersections[12];
     Triangle* newTriangle;
 
-    for(int x = 0; x < POINT_CLOUD_SIZE - 1; x++) {
-        for(int y = 0; y < POINT_CLOUD_SIZE - 1; y++) {
-            for(int z = 0; z < POINT_CLOUD_SIZE - 1; z++) {
+    for(int x = 0; x < POINT_CLOUD_WIDTH - 1; x++) {
+        for(int y = 0; y < POINT_CLOUD_HEIGHT - 1; y++) {
+            for(int z = 0; z < POINT_CLOUD_DEPTH - 1; z++) {
 
                 cubeIndex = 0;
                 if(pointCloud->GetValue(x, y, z + 1) < ISO_VALUE) cubeIndex |= 1;
@@ -67,16 +67,10 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
                         new Point(intersections[triTable[cubeIndex][i + 2]])
                     );
 
-                    // std::cout << "Intersections: ";
-                    // std::cout << intersections[triTable[cubeIndex][i]] << "; ";
-                    // std::cout << intersections[triTable[cubeIndex][i + 1]] << "; ";
-                    // std::cout << intersections[triTable[cubeIndex][i + 2]] << std::endl;
-
                     newMesh->AddTriangle(x, y, z, newTriangle);
                     newMesh->IncrementTriangleCount();
                     tempCount++;
                 }
-                std::cout << "Voxel has " << tempCount << " polygons added." << std::endl;
             }
         }
     }
@@ -87,7 +81,17 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
 }
 
 double MeshGenerator::InterpolateVertex(float density1, float density2) {
+    if(std::fabs(density2 - density1) < 0.00001) {
+        return 0.00001;
+    }
+
     return std::fabs(ISO_VALUE - density1) / std::fabs(density2 - density1);
+}
+
+void MeshGenerator::TransformMesh(Mesh* mesh/*, parser info*/) {
+    mesh->Translate(-(POINT_CLOUD_WIDTH / 2), -(POINT_CLOUD_HEIGHT / 2), -(POINT_CLOUD_DEPTH / 2));
+    mesh->Rotate(RotationType::X, MESH_ROTATION);
+    mesh->Translate(0, MESH_TRANSLATION, 0);
 }
 
 int MeshGenerator::triTable[256][16] = {
