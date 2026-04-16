@@ -66,6 +66,10 @@ void Point::Rotate(RotationType type, double cosTheta, double sinTheta) {
     MathUtilities::RotateCoordinate(type, this->x, this->y, this->z, cosTheta, sinTheta);
 }
 
+void Point::Normalize() {
+    MathUtilities::Normalize(this->x, this->y, this->z);
+}
+
 std::ostream& operator<<(std::ostream& os, const Point& p) {
     os << p.x << " " << p.y << " " << p.z;
     return os;

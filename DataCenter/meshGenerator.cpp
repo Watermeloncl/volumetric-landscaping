@@ -75,7 +75,7 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
         }
     }
 
-    std::cout << "New mesh created; " << newMesh->GetTriangleCount() << " faces." << std::endl;
+    std::cout << "New mesh created; " << newMesh->GetTriangleCount() << " triangles." << std::endl;
 
     return newMesh;
 }

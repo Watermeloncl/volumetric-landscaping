@@ -8,6 +8,13 @@
 #include "..\..\config.h"
 
 Mesh::Mesh() {
+    this->faces[0] = new Face(FaceType::TOP);
+    this->faces[1] = new Face(FaceType::BOTTOM);
+    this->faces[2] = new Face(FaceType::LEFT);
+    this->faces[3] = new Face(FaceType::RIGHT);
+    this->faces[4] = new Face(FaceType::FRONT);
+    this->faces[5] = new Face(FaceType::BACK);
+
     this->voxels.resize(POINT_CLOUD_WIDTH - 1, std::vector<std::vector<Voxel*>>(POINT_CLOUD_HEIGHT - 1, std::vector<Voxel*>(POINT_CLOUD_DEPTH - 1, nullptr)));
 
     for(int x = 0; x < POINT_CLOUD_WIDTH - 1; x++) {
@@ -26,6 +33,10 @@ Mesh::~Mesh() {
                 delete this->voxels[x][y][z];
             }
         }
+    }
+
+    for(int i = 0; i < 6; i++) {
+        delete this->faces[i];
     }
 }
 
@@ -57,6 +68,10 @@ void Mesh::Translate(double transX, double transY, double transZ) {
             }
         }
     }
+
+    for(Face* face : faces) {
+        face->Translate(transX, transY, transZ);
+    }
 }
 
 void Mesh::Rotate(RotationType type, double theta) {
@@ -69,5 +84,9 @@ void Mesh::Rotate(RotationType type, double theta) {
                 this->voxels[x][y][z]->Rotate(type, cosTheta, sinTheta);
             }
         }
+    }
+
+    for(Face* face : faces) {
+        face->Rotate(type, cosTheta, sinTheta);
     }
 }

@@ -6,11 +6,13 @@
 #include "pointCloud.h"
 #include "voxel.h"
 #include "triangle.h"
+#include "face.h"
 #include "..\..\config.h"
 
 class Mesh {
 private:
     std::vector<std::vector<std::vector<Voxel*>>> voxels;
+    Face* faces[6];
 
     int triangleCount = 0;
 

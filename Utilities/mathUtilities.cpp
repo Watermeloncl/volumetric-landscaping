@@ -35,3 +35,13 @@ void MathUtilities::RotateCoordinate(RotationType type, double& px, double& py, 
     }
 }
 
+// Clips color from 0 to 1 and multiplies by max_color
+unsigned char MathUtilities::ColorAmp(double percent) {
+    if(percent > 1) {
+        percent = 1;
+    } else if(percent < 0) {
+        percent = 0;
+    }
+
+    return (unsigned char)(percent * MAX_COLOR);
+}

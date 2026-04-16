@@ -30,6 +30,8 @@ public:
 
     void Rotate(RotationType type, double cosTheta, double sinTheta);
 
+    void Normalize();
+
     friend std::ostream& operator<<(std::ostream& os, const Point& s);
 };
 

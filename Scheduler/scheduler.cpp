@@ -24,6 +24,7 @@ SchedulerModule::SchedulerModule(HINSTANCE hInstance, int nCmdShow) {
 SchedulerModule::~SchedulerModule() {
     delete this->display;
     delete this->dataCenter;
+    delete this->mesh;
 
     for(int i = 0; i < NUM_WORKER_THREADS; i++) {
         delete this->buffers[i];
@@ -39,9 +40,10 @@ SchedulerModule::~SchedulerModule() {
 
 void SchedulerModule::RunMainLoop() {
     Mesh* mesh = this->dataCenter->CreateMesh();
+    this->mesh = mesh;
     // delete mesh;
 
-    this->InitThreads();
+    this->InitThreads(mesh);
 
     TimeStamp lastTime = SchedClock::now();
     TimeStamp now = SchedClock::now();
@@ -82,7 +84,7 @@ void SchedulerModule::RunMainLoop() {
     }
 }
 
-void SchedulerModule::InitThreads() {
+void SchedulerModule::InitThreads(Mesh* mesh) {
     this->buffers = new ThreadBuffer*[NUM_WORKER_THREADS];
 
     int totalPixels = CLIENT_SCREEN_WIDTH * CLIENT_SCREEN_HEIGHT;
@@ -91,7 +93,7 @@ void SchedulerModule::InitThreads() {
 
     for(int i = 0; i < NUM_WORKER_THREADS; i++) {
         startY = (n * i) / CLIENT_SCREEN_WIDTH;
-        ThreadBuffer* buffer = new ThreadBuffer(0, startY, n);
+        ThreadBuffer* buffer = new ThreadBuffer(0, startY, n, mesh);
         this->buffers[i] = buffer;
 
         this->workers.push_back(std::thread(Worker::ComputePixels, buffer));

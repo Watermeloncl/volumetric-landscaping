@@ -4,6 +4,8 @@
 #include <atomic>
 #include <stack>
 
+#include "..\DataCenter\Objects\mesh.h"
+
 struct ThreadBuffer {
 public:
     std::atomic<int> readIndex = -1;
@@ -15,8 +17,9 @@ public:
     int startX = 0;
     int startY = 0;
     int n = 0;
+    Mesh* mesh;
 
-    ThreadBuffer(int startX, int startY, int n);
+    ThreadBuffer(int startX, int startY, int n, Mesh* mesh);
     ~ThreadBuffer();
 };
 
