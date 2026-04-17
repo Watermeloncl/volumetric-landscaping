@@ -40,6 +40,10 @@ void Triangle::SetNormal() {
     this->normal->SetZ(nz);
 }
 
+Point* Triangle::GetNormal() {
+    return this->normal;
+}
+
 void Triangle::Translate(double transX, double transY, double transZ) {
     for(Point* point : this->points) {
         point->ChangeX(transX);
@@ -102,4 +106,9 @@ double Triangle::TestCollision(Point* origin, Point* direction) {
     } else {
         return -1;
     }
+}
+
+std::ostream& operator<<(std::ostream& os, const Triangle& s) {
+    os << "(" << *(s.points[0]) << "), (" << *(s.points[1]) << "), (" << *(s.points[2]) << "); (" << *(s.normal) << ")";
+    return os;
 }

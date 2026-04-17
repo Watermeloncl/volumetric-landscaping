@@ -11,6 +11,7 @@ class RenderFunctions {
 public:
     static CollisionPacket* FindCollision(Point* origin, Point* direction, VoxelGenerator* generator);
     static Color* CalcColor(CollisionPacket* collisionPacket, Point* direction, Lights* lights);
+    static bool InShadow(Point* collisionPoint, Lights* lights);
 
 private:
     RenderFunctions() = default;

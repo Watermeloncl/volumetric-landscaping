@@ -33,6 +33,6 @@ Lights* DataCenter::CreateLights() {
         new Color(0.2, 0.2, 0.2), //background
         new Color(0.2, 0.2, 0.2), //ambient
         new Color(1.0, 1.0, 1.0), //light color
-        new Point(-1, -1, 1) // light direction
+        new Point(1, 1, -1) // light direction
     );
 }

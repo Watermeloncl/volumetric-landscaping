@@ -14,6 +14,9 @@ public:
     CollisionPacket(Triangle* triangle, Point* collisionPoint);
     ~CollisionPacket();
 
+    void SetTriangle(Triangle* newTriangle);
+    Triangle* GetTriangle();
+
     void SetCollisionPoint(Point* newCollisionPoint);
     Point* GetCollisionPoint();
 };

@@ -1,6 +1,8 @@
 #ifndef DATA_CENTER_OBJECTS_TRIANGLE_H_
 #define DATA_CENTER_OBJECTS_TRIANGLE_H_
 
+#include <iostream>
+
 #include "point.h"
 #include "..\..\config.h"
 
@@ -13,11 +15,14 @@ public:
     ~Triangle();
 
     void SetNormal();
+    Point* GetNormal();
 
     void Translate(double transX, double transY, double transZ);
     void Rotate(RotationType type, double cosTheta, double sinTheta);
 
     double TestCollision(Point* origin, Point* direction);
+    friend std::ostream& operator<<(std::ostream& os, const Triangle& s);
+
 };
 
 #endif

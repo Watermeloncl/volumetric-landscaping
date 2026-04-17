@@ -15,6 +15,14 @@ CollisionPacket::~CollisionPacket() {
 
 }
 
+void CollisionPacket::SetTriangle(Triangle* newTriangle) {
+    this->triangle = newTriangle;
+}
+
+Triangle* CollisionPacket::GetTriangle() {
+    return this->triangle;
+}
+
 void CollisionPacket::SetCollisionPoint(Point* newCollisionPoint) {
     this->collisionPoint = newCollisionPoint;
 }

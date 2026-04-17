@@ -59,9 +59,9 @@ void VoxelGenerator::SeedRays(Point* origin, Point* direction) {
 }
 
 void VoxelGenerator::PopulateTMax() {
-    double ox = this->currPoint->GetX() + (this->direction->GetX() * DBL_EPSILON);
-    double oy = this->currPoint->GetY() + (this->direction->GetY() * DBL_EPSILON);
-    double oz = this->currPoint->GetZ() + (this->direction->GetZ() * DBL_EPSILON);
+    double ox = this->currPoint->GetX() + (this->direction->GetX() * RAY_EPSILON);
+    double oy = this->currPoint->GetY() + (this->direction->GetY() * RAY_EPSILON);
+    double oz = this->currPoint->GetZ() + (this->direction->GetZ() * RAY_EPSILON);
 
     if (this->stepX > 0) {
         this->tMax->SetX((std::floor(ox) + 1.0 - ox) * this->tDelta->GetX());
@@ -102,9 +102,9 @@ Voxel* VoxelGenerator::FindFirstVoxel() {
         this->yIndex = (int)std::floor(oy);
         this->zIndex = (int)std::floor(oz);
 
-        this->xIndex = std::max(0, std::min(this->xIndex, POINT_CLOUD_WIDTH));
-        this->yIndex = std::max(0, std::min(this->yIndex, POINT_CLOUD_HEIGHT));
-        this->zIndex = std::max(0, std::min(this->zIndex, POINT_CLOUD_DEPTH));
+        this->xIndex = std::max(0, std::min(this->xIndex, POINT_CLOUD_WIDTH - 2));
+        this->yIndex = std::max(0, std::min(this->yIndex, POINT_CLOUD_HEIGHT - 2));
+        this->zIndex = std::max(0, std::min(this->zIndex, POINT_CLOUD_DEPTH - 2));
 
         return this->mesh->GetVoxel(this->xIndex, this->yIndex, this->zIndex);
     }

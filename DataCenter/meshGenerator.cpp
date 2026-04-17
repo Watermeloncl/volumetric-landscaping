@@ -47,7 +47,7 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
                 if(edgeValue & 4) intersections[2] = Point(x + 1 - this->InterpolateVertex(pointCloud->GetValue(x + 1, y, z), pointCloud->GetValue(x, y, z)), y, z);
                 if(edgeValue & 8) intersections[3] = Point(x, y, z + this->InterpolateVertex(pointCloud->GetValue(x, y, z), pointCloud->GetValue(x, y, z + 1)));
                 if(edgeValue & 16) intersections[4] = Point(x + this->InterpolateVertex(pointCloud->GetValue(x, y + 1, z + 1), pointCloud->GetValue(x + 1, y + 1, z + 1)), y + 1, z + 1);
-                if(edgeValue & 32) intersections[5] = Point(x, y + 1, z + 1 - this->InterpolateVertex(pointCloud->GetValue(x + 1, y + 1, z + 1), pointCloud->GetValue(x + 1, y + 1, z)));
+                if(edgeValue & 32) intersections[5] = Point(x + 1/**/, y + 1, z + 1 - this->InterpolateVertex(pointCloud->GetValue(x + 1, y + 1, z + 1), pointCloud->GetValue(x + 1, y + 1, z)));
                 if(edgeValue & 64) intersections[6] = Point(x + 1 - this->InterpolateVertex(pointCloud->GetValue(x + 1, y + 1, z), pointCloud->GetValue(x, y + 1, z)), y + 1, z);
                 if(edgeValue & 128) intersections[7] = Point(x, y + 1, z + this->InterpolateVertex(pointCloud->GetValue(x, y + 1, z), pointCloud->GetValue(x, y + 1, z + 1)));
                 if(edgeValue & 256) intersections[8] = Point(x, y + this->InterpolateVertex(pointCloud->GetValue(x, y, z + 1), pointCloud->GetValue(x, y + 1, z + 1)), z + 1);
@@ -91,7 +91,7 @@ double MeshGenerator::InterpolateVertex(float density1, float density2) {
 void MeshGenerator::TransformMesh(Mesh* mesh/*, parser info*/) {    
     mesh->Translate(-(POINT_CLOUD_WIDTH / 2), -(POINT_CLOUD_HEIGHT / 2), -(POINT_CLOUD_DEPTH / 2) -0.5);
     mesh->Rotate(RotationType::X, MESH_ROTATION);
-    // mesh->Translate(0, MESH_TRANSLATION, 0);
+    mesh->Translate(0, MESH_Y_TRANSLATION, MESH_Z_TRANSLATION);
 }
 
 int MeshGenerator::triTable[256][16] = {
