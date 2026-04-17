@@ -9,7 +9,10 @@
 #include "..\Scheduler\threadBuffer.h"
 #include "..\DataCenter\dataCenter.h"
 #include "..\DataCenter\Objects\mesh.h"
+#include "..\DataCenter\Objects\worldData.h"
 #include "..\RenderFunctions\Objects\lights.h"
+#include "..\RenderFunctions\Objects\texture.h"
+
 
 class SchedulerModule {
 public:
@@ -23,8 +26,11 @@ private:
 
     Mesh* mesh = nullptr;
     Lights* lights = nullptr;
+    Texture** textures = nullptr;
+    WorldData* worldData = nullptr;
+
 public:
-    SchedulerModule(HINSTANCE hInstance, int nCmdShow);
+    SchedulerModule(HINSTANCE hInstance, int nCmdShow, LPSTR lpCmdLine);
     ~SchedulerModule();
 
     void RunMainLoop();

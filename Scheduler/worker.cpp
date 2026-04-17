@@ -22,16 +22,18 @@ void Worker::ComputePixels(ThreadBuffer* buffer) {
 
     Mesh* mesh = buffer->mesh;
     Lights* lights = buffer->lights;
+    Texture** textures = buffer->textures;
     VoxelGenerator* generator = new VoxelGenerator();
+    WorldData* worldData = buffer->worldData;
 
-    Point* origin = new Point(0, 0, -VIEW_DISTANCE);
-    Point* direction = new Point(0, 0, VIEW_DISTANCE);
+    Point* origin = new Point(0, 0, -(worldData->VIEW_DISTANCE));
+    Point* direction = new Point(0, 0, worldData->VIEW_DISTANCE);
 
-    double leftX = (WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / -2.0;
-    double rightX = (WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / 2.0;
-    double upY = (WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_HEIGHT) / 2.0;
+    double leftX = (worldData->WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / -2.0;
+    double rightX = (worldData->WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / 2.0;
+    double upY = (worldData->WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_HEIGHT) / 2.0;
 
-    double pixelSize = (WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / CLIENT_SCREEN_WIDTH;
+    double pixelSize = (worldData->WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / CLIENT_SCREEN_WIDTH;
     double halfPixelSize = pixelSize / 2.0;
 
     double currX = (buffer->startX * pixelSize) + leftX + halfPixelSize;
@@ -40,12 +42,12 @@ void Worker::ComputePixels(ThreadBuffer* buffer) {
     generator->SeedMesh(mesh);
 
     for(int i = 0; i < buffer->n; i++) {
-        direction->ReplaceValues(currX, currY, VIEW_DISTANCE);
+        direction->ReplaceValues(currX, currY, worldData->VIEW_DISTANCE);
         direction->Normalize();
 
         generator->SeedRays(origin, direction);
         CollisionPacket* collisionPacket = RenderFunctions::FindCollision(origin, direction, generator);
-        Color* color = RenderFunctions::CalcColor(collisionPacket, direction, lights);
+        Color* color = RenderFunctions::CalcColor(collisionPacket, direction, lights, textures, worldData);
 
         buffer->data[buffer->writeIndex] = MathUtilities::ColorAmp(color->GetRed());
         buffer->data[buffer->writeIndex + 1] = MathUtilities::ColorAmp(color->GetGreen());

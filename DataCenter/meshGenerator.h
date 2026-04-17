@@ -3,14 +3,16 @@
 
 #include "Objects\mesh.h"
 #include "Objects\pointCloud.h"
+#include "Objects\worldData.h"
 
 class MeshGenerator {
 private:
     static int triTable[256][16];
     static int edgeTable[256];
 
+    WorldData* worldData = nullptr;
 public:
-    MeshGenerator();
+    MeshGenerator(WorldData* worldData);
     ~MeshGenerator();
 
     Mesh* CreateMesh(PointCloud* pointCloud);

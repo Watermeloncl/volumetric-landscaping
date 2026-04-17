@@ -5,7 +5,9 @@
 #include <stack>
 
 #include "..\DataCenter\Objects\mesh.h"
+#include "..\DataCenter\Objects\worldData.h"
 #include "..\RenderFunctions\Objects\lights.h"
+#include "..\RenderFunctions\Objects\texture.h"
 
 struct ThreadBuffer {
 public:
@@ -20,8 +22,10 @@ public:
     int n = 0;
     Mesh* mesh;
     Lights* lights;
+    Texture** textures;
+    WorldData* worldData;
 
-    ThreadBuffer(int startX, int startY, int n, Mesh* mesh, Lights* lights);
+    ThreadBuffer(int startX, int startY, int n, Mesh* mesh, Lights* lights, Texture** textures, WorldData* worldData);
     ~ThreadBuffer();
 };
 

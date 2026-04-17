@@ -6,16 +6,18 @@
 #include "..\..\Utilities\mathUtilities.h"
 #include "..\..\config.h"
 
-Triangle::Triangle(Point* point0, Point* point1, Point* point2) {
+Triangle::Triangle(Point* point0, Point* point1, Point* point2, Point* voxelCoords) {
     this->points[0] = point0;
     this->points[1] = point1;
     this->points[2] = point2;
 
     this->SetNormal();
+    this->trueVoxel = voxelCoords;
 }
 
 Triangle::~Triangle() {
     delete this->normal;
+    delete this->trueVoxel;
 }
 
 void Triangle::SetNormal() {
@@ -42,6 +44,10 @@ void Triangle::SetNormal() {
 
 Point* Triangle::GetNormal() {
     return this->normal;
+}
+
+double Triangle::GetElevationHeight() {
+    return this->trueVoxel->GetY();
 }
 
 void Triangle::Translate(double transX, double transY, double transZ) {

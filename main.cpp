@@ -9,7 +9,7 @@
 #include "Scheduler\scheduler.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    SchedulerModule* sched = new SchedulerModule(hInstance, nCmdShow);
+    SchedulerModule* sched = new SchedulerModule(hInstance, nCmdShow, lpCmdLine);
     sched->RunMainLoop();
     return 0;
 }

@@ -2,15 +2,17 @@
 #define RENDERER_H_
 
 #include "..\DataCenter\Objects\point.h"
+#include "..\DataCenter\Objects\worldData.h"
 #include "Objects\collisionPacket.h"
 #include "Objects\color.h"
 #include "Objects\lights.h"
+#include "Objects\texture.h"
 #include "Objects\voxelGenerator.h"
 
 class RenderFunctions {
 public:
     static CollisionPacket* FindCollision(Point* origin, Point* direction, VoxelGenerator* generator);
-    static Color* CalcColor(CollisionPacket* collisionPacket, Point* direction, Lights* lights);
+    static Color* CalcColor(CollisionPacket* collisionPacket, Point* direction, Lights* lights, Texture** textures, WorldData* worldData);
     static bool InShadow(Point* collisionPoint, Lights* lights);
 
 private:

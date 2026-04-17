@@ -1,11 +1,15 @@
 #include "dataCenter.h"
 #include "Objects\mesh.h"
 #include "Objects\pointCloud.h"
+#include "Objects\worldData.h"
 #include "..\RenderFunctions\Objects\lights.h"
+#include "..\RenderFunctions\Objects\texture.h"
 
-DataCenter::DataCenter() {
-    this->dataGenerator = new DataGenerator();
-    this->meshGenerator = new MeshGenerator();
+DataCenter::DataCenter(char* cmdArgs) {
+    this->parser = new Parser();
+    this->worldData = this->parser->ParseFile(cmdArgs);
+    this->dataGenerator = new DataGenerator(this->worldData);
+    this->meshGenerator = new MeshGenerator(this->worldData);
     this->parser = new Parser();
 }
 
@@ -35,4 +39,17 @@ Lights* DataCenter::CreateLights() {
         new Color(1.0, 1.0, 1.0), //light color
         new Point(1, 1, -1) // light direction
     );
+}
+
+Texture** DataCenter::CreateTextures() {
+    Texture** textures = new Texture*[NUM_TEXTURES];
+    textures[0] = new Texture("dirt");
+    textures[1] = new Texture("grass");
+    textures[2] = new Texture("rock");
+    textures[3] = new Texture("sand");
+    return textures;
+}
+
+WorldData* DataCenter::GetWorldData() {
+    return this->worldData;
 }

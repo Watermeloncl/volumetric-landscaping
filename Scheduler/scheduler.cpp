@@ -16,9 +16,10 @@ using SchedClock = std::chrono::high_resolution_clock;
 using Duration = std::chrono::duration<double>;
 using TimeStamp = std::chrono::time_point<std::chrono::high_resolution_clock>;
 
-SchedulerModule::SchedulerModule(HINSTANCE hInstance, int nCmdShow) {
+SchedulerModule::SchedulerModule(HINSTANCE hInstance, int nCmdShow, LPSTR lpCmdLine) {
     this->display = new DisplayModule(hInstance, nCmdShow);
-    this->dataCenter = new DataCenter();
+    char* cmdArgs = lpCmdLine;
+    this->dataCenter = new DataCenter(cmdArgs);
 }
 
 SchedulerModule::~SchedulerModule() {
@@ -26,6 +27,11 @@ SchedulerModule::~SchedulerModule() {
     delete this->dataCenter;
     delete this->mesh;
     delete this->lights;
+    for(int i = 0; i < NUM_TEXTURES; i++) {
+        delete this->textures[i];
+    }
+    delete[] this->textures;
+    delete this->worldData;
 
     for(int i = 0; i < NUM_WORKER_THREADS; i++) {
         delete this->buffers[i];
@@ -40,8 +46,10 @@ SchedulerModule::~SchedulerModule() {
 }
 
 void SchedulerModule::RunMainLoop() {
+    this->worldData = this->dataCenter->GetWorldData();
     this->mesh = this->dataCenter->CreateMesh();
     this->lights = this->dataCenter->CreateLights();
+    this->textures = this->dataCenter->CreateTextures();
 
     this->InitThreads();
 
@@ -97,7 +105,7 @@ void SchedulerModule::InitThreads() {
 
     for(int i = 0; i < NUM_WORKER_THREADS; i++) {
         startY = (n * i) / CLIENT_SCREEN_WIDTH;
-        ThreadBuffer* buffer = new ThreadBuffer(0, startY, n, this->mesh, this->lights);
+        ThreadBuffer* buffer = new ThreadBuffer(0, startY, n, this->mesh, this->lights, this->textures, this->worldData);
         this->buffers[i] = buffer;
 
         this->workers.push_back(std::thread(Worker::ComputePixels, buffer));

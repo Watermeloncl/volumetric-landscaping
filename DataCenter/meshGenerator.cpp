@@ -6,10 +6,11 @@
 #include "Objects\voxel.h"
 #include "Objects\triangle.h"
 #include "Objects\point.h"
+#include "Objects\worldData.h"
 #include "..\config.h"
 
-MeshGenerator::MeshGenerator() {
-
+MeshGenerator::MeshGenerator(WorldData* worldData) {
+    this->worldData = worldData;
 }
 
 MeshGenerator::~MeshGenerator() {
@@ -28,14 +29,14 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
             for(int z = 0; z < POINT_CLOUD_DEPTH - 1; z++) {
 
                 cubeIndex = 0;
-                if(pointCloud->GetValue(x, y, z + 1) < ISO_VALUE) cubeIndex |= 1;
-                if(pointCloud->GetValue(x + 1, y, z + 1) < ISO_VALUE) cubeIndex |= 2;
-                if(pointCloud->GetValue(x + 1, y, z) < ISO_VALUE) cubeIndex |= 4;
-                if(pointCloud->GetValue(x, y, z) < ISO_VALUE) cubeIndex |= 8;
-                if(pointCloud->GetValue(x, y + 1, z + 1) < ISO_VALUE) cubeIndex |= 16;
-                if(pointCloud->GetValue(x + 1, y + 1, z + 1) < ISO_VALUE) cubeIndex |= 32;
-                if(pointCloud->GetValue(x + 1, y + 1, z) < ISO_VALUE) cubeIndex |= 64;
-                if(pointCloud->GetValue(x, y + 1, z) < ISO_VALUE) cubeIndex |= 128;
+                if(pointCloud->GetValue(x, y, z + 1) < worldData->ISO_VALUE) cubeIndex |= 1;
+                if(pointCloud->GetValue(x + 1, y, z + 1) < worldData->ISO_VALUE) cubeIndex |= 2;
+                if(pointCloud->GetValue(x + 1, y, z) < worldData->ISO_VALUE) cubeIndex |= 4;
+                if(pointCloud->GetValue(x, y, z) < worldData->ISO_VALUE) cubeIndex |= 8;
+                if(pointCloud->GetValue(x, y + 1, z + 1) < worldData->ISO_VALUE) cubeIndex |= 16;
+                if(pointCloud->GetValue(x + 1, y + 1, z + 1) < worldData->ISO_VALUE) cubeIndex |= 32;
+                if(pointCloud->GetValue(x + 1, y + 1, z) < worldData->ISO_VALUE) cubeIndex |= 64;
+                if(pointCloud->GetValue(x, y + 1, z) < worldData->ISO_VALUE) cubeIndex |= 128;
 
                 edgeValue = edgeTable[cubeIndex];
                 if(edgeValue == 0) {
@@ -64,7 +65,8 @@ Mesh* MeshGenerator::CreateMesh(PointCloud* pointCloud) {
                     newTriangle = new Triangle(
                         new Point(intersections[triTable[cubeIndex][i]]),
                         new Point(intersections[triTable[cubeIndex][i + 1]]),
-                        new Point(intersections[triTable[cubeIndex][i + 2]])
+                        new Point(intersections[triTable[cubeIndex][i + 2]]),
+                        new Point(x, y, z)
                     );
 
                     newMesh->AddTriangle(x, y, z, newTriangle);
@@ -85,13 +87,13 @@ double MeshGenerator::InterpolateVertex(float density1, float density2) {
         return 0.00001;
     }
 
-    return std::fabs(ISO_VALUE - density1) / std::fabs(density2 - density1);
+    return std::fabs(worldData->ISO_VALUE - density1) / std::fabs(density2 - density1);
 }
 
 void MeshGenerator::TransformMesh(Mesh* mesh/*, parser info*/) {    
     mesh->Translate(-(POINT_CLOUD_WIDTH / 2), -(POINT_CLOUD_HEIGHT / 2), -(POINT_CLOUD_DEPTH / 2) -0.5);
-    mesh->Rotate(RotationType::X, MESH_ROTATION);
-    mesh->Translate(0, MESH_Y_TRANSLATION, MESH_Z_TRANSLATION);
+    mesh->Rotate(RotationType::X, worldData->MESH_ROTATION);
+    mesh->Translate(0, worldData->MESH_Y_TRANSLATION, worldData->MESH_Z_TRANSLATION);
 }
 
 int MeshGenerator::triTable[256][16] = {
