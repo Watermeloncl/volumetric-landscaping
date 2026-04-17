@@ -2,3 +2,6 @@ main.exe
 .vscode
 DataCenter/DataFiles/Outputs/*
 DataCenter/DataFiles/Textures/*
+
+!DataCenter/DataFiles/Outputs/.gitkeep
+!DataCenter/DataFiles/Textures/.gitkeep
