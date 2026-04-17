@@ -16,6 +16,8 @@ public:
 
     void Translate(double transX, double transY, double transZ);
     void Rotate(RotationType type, double cosTheta, double sinTheta);
+
+    double TestCollision(Point* origin, Point* direction);
 };
 
 #endif

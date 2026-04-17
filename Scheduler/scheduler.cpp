@@ -25,6 +25,7 @@ SchedulerModule::~SchedulerModule() {
     delete this->display;
     delete this->dataCenter;
     delete this->mesh;
+    delete this->lights;
 
     for(int i = 0; i < NUM_WORKER_THREADS; i++) {
         delete this->buffers[i];
@@ -39,11 +40,10 @@ SchedulerModule::~SchedulerModule() {
 }
 
 void SchedulerModule::RunMainLoop() {
-    Mesh* mesh = this->dataCenter->CreateMesh();
-    this->mesh = mesh;
-    // delete mesh;
+    this->mesh = this->dataCenter->CreateMesh();
+    this->lights = this->dataCenter->CreateLights();
 
-    this->InitThreads(mesh);
+    this->InitThreads();
 
     TimeStamp lastTime = SchedClock::now();
     TimeStamp now = SchedClock::now();
@@ -72,10 +72,12 @@ void SchedulerModule::RunMainLoop() {
  
         while(accumulator >= dt) {
             frame++;
-            // std::cout << "frame" << std::endl;
+
             for(int i = 0; i < NUM_WORKER_THREADS; i++) {
                 this->AddPixels(this->buffers[i], i);
             }
+
+            std::cout << std::flush;
 
             accumulator -= dt;
         }
@@ -84,16 +86,18 @@ void SchedulerModule::RunMainLoop() {
     }
 }
 
-void SchedulerModule::InitThreads(Mesh* mesh) {
+void SchedulerModule::InitThreads() {
     this->buffers = new ThreadBuffer*[NUM_WORKER_THREADS];
 
     int totalPixels = CLIENT_SCREEN_WIDTH * CLIENT_SCREEN_HEIGHT;
     int n = totalPixels / NUM_WORKER_THREADS;
     int startY;
 
+    lights->GetLightDirection()->Normalize();
+
     for(int i = 0; i < NUM_WORKER_THREADS; i++) {
         startY = (n * i) / CLIENT_SCREEN_WIDTH;
-        ThreadBuffer* buffer = new ThreadBuffer(0, startY, n, mesh);
+        ThreadBuffer* buffer = new ThreadBuffer(0, startY, n, this->mesh, this->lights);
         this->buffers[i] = buffer;
 
         this->workers.push_back(std::thread(Worker::ComputePixels, buffer));

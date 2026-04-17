@@ -88,10 +88,10 @@ double MeshGenerator::InterpolateVertex(float density1, float density2) {
     return std::fabs(ISO_VALUE - density1) / std::fabs(density2 - density1);
 }
 
-void MeshGenerator::TransformMesh(Mesh* mesh/*, parser info*/) {
-    mesh->Translate(-(POINT_CLOUD_WIDTH / 2), -(POINT_CLOUD_HEIGHT / 2), -(POINT_CLOUD_DEPTH / 2));
+void MeshGenerator::TransformMesh(Mesh* mesh/*, parser info*/) {    
+    mesh->Translate(-(POINT_CLOUD_WIDTH / 2), -(POINT_CLOUD_HEIGHT / 2), -(POINT_CLOUD_DEPTH / 2) -0.5);
     mesh->Rotate(RotationType::X, MESH_ROTATION);
-    mesh->Translate(0, MESH_TRANSLATION, 0);
+    // mesh->Translate(0, MESH_TRANSLATION, 0);
 }
 
 int MeshGenerator::triTable[256][16] = {

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "triangle.h"
+#include "..\..\RenderFunctions\Objects\collisionPacket.h"
 #include "..\..\config.h"
 
 class Voxel {
@@ -19,6 +20,8 @@ public:
     
     void Translate(double transX, double transY, double transZ);
     void Rotate(RotationType type, double cosTheta, double sinTheta);
+
+    CollisionPacket* FindCollision(Point* origin, Point* direction);
 };
 
 #endif

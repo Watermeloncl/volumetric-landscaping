@@ -31,6 +31,9 @@ public:
     void Rotate(RotationType type, double cosTheta, double sinTheta);
 
     void Normalize();
+    void ReplaceValues(double* newValues);
+    void ReplaceValues(Point* point);
+    void ReplaceValues(double newX, double newY, double newZ);
 
     friend std::ostream& operator<<(std::ostream& os, const Point& s);
 };

@@ -70,6 +70,24 @@ void Point::Normalize() {
     MathUtilities::Normalize(this->x, this->y, this->z);
 }
 
+void Point::ReplaceValues(double* newValues) {
+    this->x = newValues[0];
+    this->y = newValues[1];
+    this->z = newValues[2];
+}
+
+void Point::ReplaceValues(Point* point) {
+    this->x = point->x;
+    this->y = point->y;
+    this->z = point->z;
+}
+
+void Point::ReplaceValues(double newX, double newY, double newZ) {
+    this->x = newX;
+    this->y = newY;
+    this->z = newZ;
+}
+
 std::ostream& operator<<(std::ostream& os, const Point& p) {
     os << p.x << " " << p.y << " " << p.z;
     return os;

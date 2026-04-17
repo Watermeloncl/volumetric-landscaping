@@ -9,6 +9,7 @@
 #include "..\Scheduler\threadBuffer.h"
 #include "..\DataCenter\dataCenter.h"
 #include "..\DataCenter\Objects\mesh.h"
+#include "..\RenderFunctions\Objects\lights.h"
 
 class SchedulerModule {
 public:
@@ -21,12 +22,13 @@ private:
     DataCenter* dataCenter = nullptr;
 
     Mesh* mesh = nullptr;
+    Lights* lights = nullptr;
 public:
     SchedulerModule(HINSTANCE hInstance, int nCmdShow);
     ~SchedulerModule();
 
     void RunMainLoop();
-    void InitThreads(Mesh* mesh);
+    void InitThreads();
     void AddPixels(ThreadBuffer* buffer, int threadNum);
 
 private:

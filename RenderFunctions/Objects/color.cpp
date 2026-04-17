@@ -10,6 +10,12 @@ Color::Color(double red, double green, double blue) {
     this->blue = blue;
 }
 
+Color::Color(Color* color) {
+    this->red = color->red;
+    this->green = color->green;
+    this->blue = color->blue;
+}
+
 Color::~Color() {
 
 }

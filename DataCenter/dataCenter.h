@@ -5,6 +5,7 @@
 #include "meshGenerator.h"
 #include "parser.h"
 #include "Objects\mesh.h"
+#include "..\RenderFunctions\Objects\lights.h"
 
 class DataCenter {
 private:
@@ -17,6 +18,8 @@ public:
     ~DataCenter();
 
     Mesh* CreateMesh();
+    Lights* CreateLights();
+
 };
 
 #endif

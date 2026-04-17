@@ -7,6 +7,7 @@
 #include "voxel.h"
 #include "triangle.h"
 #include "face.h"
+#include "..\..\Utilities\matrix.h"
 #include "..\..\config.h"
 
 class Mesh {
@@ -15,6 +16,8 @@ private:
     Face* faces[6];
 
     int triangleCount = 0;
+    Matrix* transformMatrix = nullptr;
+    Matrix* inverseMatrix = nullptr;
 
 public:
     Mesh();
@@ -28,8 +31,15 @@ public:
     void IncrementTriangleCount();
     int GetTriangleCount();
 
+    Matrix* GetTransformMatrix();
+    Matrix* GetInverseMatrix();
+
     void Translate(double transX, double transY, double transZ);
     void Rotate(RotationType type, double theta);
+    void UpdateInverseMatrix();
+
+private:
+    //reset generator
 };
 
 #endif

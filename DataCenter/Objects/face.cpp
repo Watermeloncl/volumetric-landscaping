@@ -68,10 +68,6 @@ void Face::Translate(double transX, double transY, double transZ) {
         point->ChangeY(transY);
         point->ChangeZ(transZ);
     }
-
-    normal->ChangeX(transX);
-    normal->ChangeY(transY);
-    normal->ChangeZ(transZ);
 }
 
 void Face::Rotate(RotationType type, double cosTheta, double sinTheta) {
@@ -80,4 +76,5 @@ void Face::Rotate(RotationType type, double cosTheta, double sinTheta) {
     }
 
     normal->Rotate(type, cosTheta, sinTheta);
+    normal->Normalize(); //precaution
 }

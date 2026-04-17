@@ -45,3 +45,27 @@ unsigned char MathUtilities::ColorAmp(double percent) {
 
     return (unsigned char)(percent * MAX_COLOR);
 }
+
+void MathUtilities::MatrixMultiply(double* multiplier, double* original, double* result) {
+    for (int row = 0; row < 4; ++row) {
+        for (int col = 0; col < 4; ++col) {
+            double sum = 0.0;
+            for (int k = 0; k < 4; ++k) {
+                sum += multiplier[row * 4 + k] * original[k * 4 + col];
+            }
+            result[row * 4 + col] = sum;
+        }
+    }
+}
+
+Point MathUtilities::CrossProduct(Point* a, Point* b) {
+    return Point(
+        (a->GetY() * b->GetZ()) - (a->GetZ() * b->GetY()),
+        (a->GetZ() * b->GetX()) - (a->GetX() * b->GetZ()),
+        (a->GetX() * b->GetY()) - (a->GetY() * b->GetX())
+    );
+}
+
+double MathUtilities::DotProduct(Point* a, Point* b) {
+    return (a->GetX() * b->GetX()) + (a->GetY() * b->GetY()) + (a->GetZ() * b->GetZ());
+}

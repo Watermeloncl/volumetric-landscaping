@@ -46,10 +46,6 @@ void Triangle::Translate(double transX, double transY, double transZ) {
         point->ChangeY(transY);
         point->ChangeZ(transZ);
     }
-
-    normal->ChangeX(transX);
-    normal->ChangeY(transY);
-    normal->ChangeZ(transZ);
 }
 
 void Triangle::Rotate(RotationType type, double cosTheta, double sinTheta) {
@@ -58,4 +54,52 @@ void Triangle::Rotate(RotationType type, double cosTheta, double sinTheta) {
     }
 
     normal->Rotate(type, cosTheta, sinTheta);
+    normal->Normalize(); //precaution
+}
+
+double Triangle::TestCollision(Point* origin, Point* direction) {
+    Point edge1 = Point(
+        this->points[1]->GetX() - this->points[0]->GetX(),
+        this->points[1]->GetY() - this->points[0]->GetY(),
+        this->points[1]->GetZ() - this->points[0]->GetZ()
+    );
+
+    Point edge2 = Point(
+        this->points[2]->GetX() - this->points[0]->GetX(),
+        this->points[2]->GetY() - this->points[0]->GetY(),
+        this->points[2]->GetZ() - this->points[0]->GetZ()
+    );
+
+    Point h = MathUtilities::CrossProduct(direction, &edge2);
+    double determinant = MathUtilities::DotProduct(&edge1, &h);
+
+    if(determinant < RAY_EPSILON) {
+        return -1;
+    }
+
+    double invDeterminant = 1.0 / determinant;
+    Point s = Point(
+        origin->GetX() - this->points[0]->GetX(),
+        origin->GetY() - this->points[0]->GetY(),
+        origin->GetZ() - this->points[0]->GetZ()
+    );
+
+    double u = invDeterminant * MathUtilities::DotProduct(&s, &h);
+    if((u < 0) || (u > 1)) {
+        return -1;
+    }
+
+    Point q = MathUtilities::CrossProduct(&s, &edge1);
+    double v = invDeterminant * MathUtilities::DotProduct(direction, &q);
+
+    if((v < 0) || ((u + v) > 1)) {
+        return -1;
+    }
+
+    double t = invDeterminant * MathUtilities::DotProduct(&edge2, &q);
+    if(t > RAY_EPSILON) {
+        return t;
+    } else {
+        return -1;
+    }
 }

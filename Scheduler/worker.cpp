@@ -11,20 +11,21 @@
 #include "..\RenderFunctions\renderFunctions.h"
 #include "..\RenderFunctions\Objects\collisionPacket.h"
 #include "..\RenderFunctions\Objects\color.h"
+#include "..\RenderFunctions\Objects\lights.h"
+#include "..\RenderFunctions\Objects\voxelGenerator.h"
 #include "..\Utilities\mathUtilities.h"
 #include "..\config.h"
-
-unsigned char act(float value, float i, float n, float amp);
 
 void Worker::ComputePixels(ThreadBuffer* buffer) {
     static thread_local std::mt19937 gen(std::random_device{}());
     std::normal_distribution<float> randomColor(-1, 1);
 
     Mesh* mesh = buffer->mesh;
+    Lights* lights = buffer->lights;
+    VoxelGenerator* generator = new VoxelGenerator();
 
     Point* origin = new Point(0, 0, -VIEW_DISTANCE);
     Point* direction = new Point(0, 0, VIEW_DISTANCE);
-    direction->Normalize();
 
     double leftX = (WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / -2.0;
     double rightX = (WORLD_WINDOW_SIZE * CLIENT_SCREEN_RATIO_WIDTH) / 2.0;
@@ -36,31 +37,15 @@ void Worker::ComputePixels(ThreadBuffer* buffer) {
     double currX = (buffer->startX * pixelSize) + leftX + halfPixelSize;
     double currY = upY - (buffer->startY * pixelSize) - halfPixelSize;
 
+    generator->SeedMesh(mesh);
+
     for(int i = 0; i < buffer->n; i++) {
+        direction->ReplaceValues(currX, currY, VIEW_DISTANCE);
+        direction->Normalize();
 
-        CollisionPacket* collisionPacket = RenderFunctions::FindCollision(origin, direction, mesh);
-        Color* color = RenderFunctions::CalcColor(collisionPacket, direction);
-
-        /*
-        
-        FindCollision()
-        - Find First Voxel
-          - Find face, find voxel in face
-        loop (
-        - Check triangles;
-        - If none, find next voxel
-        - Return (packet of?) triangle, collision point
-        )
-
-        CalcColor(triangle, direction)
-        - translate normal into texture
-        - translate collision point into color
-        - determine phong shading
-        - return pixel color
-
-        Set color
-        
-        */
+        generator->SeedRays(origin, direction);
+        CollisionPacket* collisionPacket = RenderFunctions::FindCollision(origin, direction, generator);
+        Color* color = RenderFunctions::CalcColor(collisionPacket, direction, lights);
 
         buffer->data[buffer->writeIndex] = MathUtilities::ColorAmp(color->GetRed());
         buffer->data[buffer->writeIndex + 1] = MathUtilities::ColorAmp(color->GetGreen());

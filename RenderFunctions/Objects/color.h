@@ -10,6 +10,7 @@ private:
 public:
     Color();
     Color(double red, double green, double blue);
+    Color(Color* color);
     ~Color();
 
     void SetRed(double newRed);
