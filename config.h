@@ -11,7 +11,7 @@ const int CLIENT_SCREEN_RATIO_HEIGHT = 9;
 const int NUM_WORKER_THREADS = 10;
 
 const int POINT_CLOUD_WIDTH = 128; //128
-const int POINT_CLOUD_HEIGHT = 32; //32
+const int POINT_CLOUD_HEIGHT = 64; //32
 const int POINT_CLOUD_DEPTH = 128; //128
 
 const int MAX_COLOR = 255;

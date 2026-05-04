@@ -59,8 +59,14 @@ WorldData* Parser::ParseFile(char* filename) {
             ss >> data->ALT_COLOR_G;
         } else if(cmd == "ALT_COLOR_B") {
             ss >> data->ALT_COLOR_B;
-        } else if(cmd == "MESH_ROTATION") {
-            ss >> data->MESH_ROTATION;
+        } else if(cmd == "MESH_X_ROTATION") {
+            ss >> data->MESH_X_ROTATION;
+        } else if(cmd == "MESH_Y_ROTATION") {
+            ss >> data->MESH_Y_ROTATION;
+        } else if(cmd == "MESH_Z_ROTATION") {
+            ss >> data->MESH_Z_ROTATION;
+        } else if(cmd == "MESH_X_TRANSLATION") {
+            ss >> data->MESH_X_TRANSLATION;
         } else if(cmd == "MESH_Y_TRANSLATION") {
             ss >> data->MESH_Y_TRANSLATION;
         } else if(cmd == "MESH_Z_TRANSLATION") {

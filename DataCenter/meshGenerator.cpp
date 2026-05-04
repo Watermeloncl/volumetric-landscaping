@@ -92,8 +92,10 @@ double MeshGenerator::InterpolateVertex(float density1, float density2) {
 
 void MeshGenerator::TransformMesh(Mesh* mesh/*, parser info*/) {    
     mesh->Translate(-(POINT_CLOUD_WIDTH / 2), -(POINT_CLOUD_HEIGHT / 2), -(POINT_CLOUD_DEPTH / 2) -0.5);
-    mesh->Rotate(RotationType::X, worldData->MESH_ROTATION);
-    mesh->Translate(0, worldData->MESH_Y_TRANSLATION, worldData->MESH_Z_TRANSLATION);
+    if(worldData->MESH_X_ROTATION != 0) mesh->Rotate(RotationType::X, worldData->MESH_X_ROTATION);
+    if(worldData->MESH_Y_ROTATION != 0) mesh->Rotate(RotationType::Y, worldData->MESH_Y_ROTATION);
+    if(worldData->MESH_Z_ROTATION != 0) mesh->Rotate(RotationType::Z, worldData->MESH_Z_ROTATION);
+    mesh->Translate(worldData->MESH_X_TRANSLATION, worldData->MESH_Y_TRANSLATION, worldData->MESH_Z_TRANSLATION);
 }
 
 int MeshGenerator::triTable[256][16] = {

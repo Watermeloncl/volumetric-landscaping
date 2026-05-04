@@ -16,7 +16,11 @@ public:
 
     float ISO_VALUE = -0.1f;//-0.3f;
 
-    double MESH_ROTATION = -0.4; //-0.5
+    double MESH_X_ROTATION = -0.4; //-0.5
+    double MESH_Y_ROTATION = 0.0; //-0.5
+    double MESH_Z_ROTATION = 0.0; //-0.5
+
+    double MESH_X_TRANSLATION = 0;
     double MESH_Y_TRANSLATION = 0;
     double MESH_Z_TRANSLATION = 60;
 
